@@ -29,9 +29,23 @@ import { storage } from '@/main'
         let name = (+new Date()) + '-' + this.file.name
         let metadata = { contentType: this.file.type}
         storage.child(name).put(this.file, metadata)
-        .then(snapshot => snapshot.ref.getDownLoadURL())
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then( url => {
+          let image = {
+            url: url,
+            name: name,
+            createdAt: (+new Date()),
+            scorePromedio: 0
+          }
+          firestore.collection('images').add(image)
+        })
       }
-    }
+    },
+    firestore() {
+      return {
+        images: firestore.collection('images')
+      }
+    } 
   }
 </script>
 
